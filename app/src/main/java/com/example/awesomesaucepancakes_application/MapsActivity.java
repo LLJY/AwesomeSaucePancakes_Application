@@ -38,7 +38,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private BottomNavigationView bottomNavigationView;
     private ViewFlipper viewFlipper;
-    //New Comment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

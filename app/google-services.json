@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "998895332957",
+    "project_id": "awesomesaucepancakes-5c469",
+    "storage_bucket": "awesomesaucepancakes-5c469.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998895332957:android:5c2f4af04d1e2bd171e7b4",
+        "android_client_info": {
+          "package_name": "com.example.awesomesaucepancakes_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998895332957-daf8g3t5m0dk5k4n4it3uk7p0f8uo7nj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrV6dcZtXbCFJKE7kHFa162P9P-IO8NLo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998895332957-daf8g3t5m0dk5k4n4it3uk7p0f8uo7nj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

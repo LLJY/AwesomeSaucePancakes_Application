@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="8dp"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
     <TextView
+        android:textColor="@color/quantum_googred"
+        android:text="UserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -12,6 +15,8 @@
         android:textStyle="normal|bold" />
 
     <TextView
+        android:textStyle="italic"
+        android:text="Time 00:00:00"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/message_user"
@@ -19,6 +24,7 @@
         android:id="@+id/message_time" />
 
     <TextView
+        android:text="MessageContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/message_user"

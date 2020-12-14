@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Build;
@@ -63,8 +64,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private TextView TextView;
     private FirebaseListAdapter<ChatMessage> adapter;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -103,9 +102,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // Load chat room contents
             displayChatMessages();
         }
-
-
-
 
         imgbtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,6 +170,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         ListView listOfMessages = (ListView)findViewById(R.id.messages_view);
         FirebaseDatabase fb = FirebaseDatabase.getInstance();
         DatabaseReference dbRef = fb.getReference("Messages");
+
         //The error said the constructor expected FirebaseListOptions - here you create them:
         FirebaseListOptions<ChatMessage> options = new FirebaseListOptions.Builder<ChatMessage>()
                 .setQuery(dbRef, ChatMessage.class)
@@ -183,8 +180,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         adapter = new FirebaseListAdapter<ChatMessage>(options) {
             @Override
             protected void populateView(@NonNull View v, @NonNull ChatMessage model, int position) {
-                TextView msgText = v.findViewById(R.id.message_text);
                 TextView msgUser = v.findViewById(R.id.message_user);
+                if (model.getMessageUser().equals(FirebaseAuth.getInstance().getCurrentUser().getDisplayName())){
+                    msgUser.setTextColor(Color.parseColor("#43A047"));
+                }else{
+                    msgUser.setTextColor(Color.RED);
+                }
+                TextView msgText = v.findViewById(R.id.message_text);
+
                 TextView msgTime = v.findViewById(R.id.message_time);
 
                 msgText.setText(model.getMessageText());
@@ -195,7 +198,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };
         adapter.startListening();
         listOfMessages.setAdapter(adapter);
-
     }
 
 

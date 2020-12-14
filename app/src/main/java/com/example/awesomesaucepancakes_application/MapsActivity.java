@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -43,10 +44,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
 import java.text.DateFormat;
+import java.util.Date;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -68,11 +71,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        /*
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
+        */
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         viewFlipper = findViewById(R.id.viewFlipper);
         imgbtn=findViewById(R.id.btn);
@@ -112,9 +116,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 // Read the input field and push a new instance
                 // of ChatMessage to the Firebase database
                 FirebaseDatabase.getInstance()
-                        .getReference()
+                        .getReference("Messages")
                         .push()
-                        .setValue(new ChatMessage(yes));
+                        .setValue( new ChatMessage(yes, FirebaseAuth.getInstance().getCurrentUser().getDisplayName()));
 
                 displayChatMessages();
 
@@ -153,32 +157,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
+
     private void displayChatMessages(){
+
         ListView listOfMessages = (ListView)findViewById(R.id.messages_view);
-        //Suppose you want to retrieve "chats" in your Firebase DB:
-        Query query = FirebaseDatabase.getInstance().getReference();
+        FirebaseDatabase fb = FirebaseDatabase.getInstance();
+        DatabaseReference dbRef = fb.getReference("Messages");
         //The error said the constructor expected FirebaseListOptions - here you create them:
         FirebaseListOptions<ChatMessage> options = new FirebaseListOptions.Builder<ChatMessage>()
-                .setQuery(query, ChatMessage.class)
+                .setQuery(dbRef, ChatMessage.class)
                 .setLayout(R.layout.message)
                 .build();
 
         adapter = new FirebaseListAdapter<ChatMessage>(options) {
             @Override
-            protected void populateView(View v, ChatMessage model, int position) {
-                // Get references to the views of message.xml
-                TextView messageText = (TextView)v.findViewById(R.id.message_text);
-                TextView messageTime = (TextView)v.findViewById(R.id.message_time);
+            protected void populateView(@NonNull View v, @NonNull ChatMessage model, int position) {
+                TextView msgText = v.findViewById(R.id.message_text);
+                TextView msgUser = v.findViewById(R.id.message_user);
+                TextView msgTime = v.findViewById(R.id.message_time);
 
-                // Set their text
-                messageText.setText(model.getMessageText());
-
-
-                // Format the date before showing it
-                messageTime.setText(DateFormat.getDateInstance().format(model.getMessageTime()));
+                msgText.setText(model.getMessageText());
+                msgUser.setText(model.getMessageUser());
+               // DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.getDateTimeInstance());
+                msgTime.setText(DateFormat.getDateTimeInstance().format(model.getMessageTime()));
             }
         };
-
+        adapter.startListening();
         listOfMessages.setAdapter(adapter);
 
     }
